@@ -12,7 +12,7 @@ The seed uses Jest for unit testing, Gulp for building and JSPM as the browser p
 
 Clone this repo and run npm install
 ```
-git clone git@github.com:pauldcollins/react-image-list.git
+git clone git@github.com:pauldcollins/image-list.git
 
 npm install
 ```
