@@ -14,6 +14,8 @@ Clone this repo and run npm install
 ```
 git clone git@github.com:pauldcollins/image-list.git
 
+cd image-list
+
 npm install
 ```
 
