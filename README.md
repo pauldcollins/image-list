@@ -1,4 +1,4 @@
-# ReactJS + JEST + GULP + JSPM - Seed
+# ReactJS image list with filtering
 
 React project playing with displaying an image list and filtering results.
 
