@@ -21,7 +21,7 @@ npm install
 
 ## Usage 
 
-There are two main gulp tasks. Run both tasks in two different terminal tabs, so that you can develop the component in TDD way.
+There are two main gulp tasks. Run both tasks in two different terminal tabs, so that you can test while running code.
 
 **Develop**
 
