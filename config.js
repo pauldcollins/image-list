@@ -19,6 +19,7 @@ System.config({
     "babel": "npm:babel-core@5.2.15",
     "babel-runtime": "npm:babel-runtime@5.2.15",
     "core-js": "npm:core-js@0.9.6",
+    "jquery": "github:components/jquery@2.1.4",
     "lodash": "npm:lodash@3.10.0",
     "react": "npm:react@0.13.2",
     "github:jspm/nodelibs-buffer@0.1.0": {

@@ -6,12 +6,22 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   </head>
   <body>
-    <!-- Render the React components here -->
-    <div id="view"></div>
+    <div class="jumbotron bs-docs-header">
+        <div class="container">
+            <h1>Image list</h1>
+            <p>
+                A simple image list built with React JS<br>
+                It also uses Jest for unit testing, Gulp for building and JSPM as the browser package manager.
+            </p>
+            <p><a class="btn btn-primary btn-lg" href="http://pauldcollins.github.io" role="button" target="_blank">Built by Paul Collins</a></p>
+        </div>
+    </div>
+    <div class="container">
+        <!-- Render the React components here -->
+        <div id="view"></div>
+    </div>    
     <script src="jspm_packages/system.js"></script>
     <script src="config.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.0/lodash.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript">
       System.import('components/app');
     </script>

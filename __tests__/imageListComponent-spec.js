@@ -1,4 +1,5 @@
 jest.dontMock('../scripts/imageListComponent.js');
+jest.dontMock('jquery');
 
 describe('ImageList', function() {
   var React = require('react/addons');
@@ -11,7 +12,7 @@ describe('ImageList', function() {
 
   it('should exists', function() {
     // Render into document
-    var imageList = TestUtils.renderIntoDocument( <List /> );
+    var imageList = TestUtils.renderIntoDocument( <imageList /> );
     expect(TestUtils.isCompositeComponent(imageList)).toBeTruthy();
   });
 });
