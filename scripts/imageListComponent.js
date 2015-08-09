@@ -8,11 +8,33 @@ var listStyle = {
 
 var Filters = React.createClass({
     handleFilterChange: function() {
-        var value = this.refs.filterInput.getDOMNode().value;
-        this.props.updateFilter(value);
+        this.props.updateFilter({
+            model: this.refs.filterInput.getDOMNode().value,
+            make: this.refs.filterMake.getDOMNode().value
+        });
     },
     render: function() {
-        return <input type="text" ref="filterInput" onChange={this.handleFilterChange} placeholder="Filter" />;
+        var options = this.props.makes.map(function  (make){
+            return <option value={make}>{make}</option>;
+        });
+        return (
+            <form className="row">
+                <div className="col-lg-2">
+                    <h2>Filter by:</h2>
+                </div>
+                <div className="col-lg-3">
+                    <label className="pull-left" for="camera-model">Camera Model</label>
+                    <input className="form-control" id="camera-model" type="text" ref="filterInput" onChange={this.handleFilterChange} placeholder="Camera model" />
+                </div>
+                <div className="col-lg-3">
+                    <label for="camera-model">Camera Make</label>
+                    <select className="form-control" ref="filterMake" onChange={this.handleFilterChange}>
+                        <option value="">-- All camera makes</option>
+                        {options}
+                    </select>
+                </div>
+            </form>
+        );
     }
 });
 
@@ -27,8 +49,8 @@ var List = React.createClass({
                         <h2>{item.filename}</h2>
                         <p><img className="img-thumbnail" src={item.photoLink}/></p>
                         <p>
-                            <small>Camera model: <strong>{item.model}</strong></small><br/>
-                            <small>Camera make: <strong>{item.make}</strong></small>
+                            {item.model ? [<small>Camera model: <strong>{item.model}</strong></small>, <br/>] : null }
+                            {item.make ? [<small>Camera make: <strong>{item.make}</strong></small>] : null }
                         </p>
                     </li>
                 )
@@ -38,8 +60,8 @@ var List = React.createClass({
             content = <p>No items matching this filter</p>;
         }
         return (
-            <div className="results">
-                <h4>Results</h4>
+            <div className="results row">
+                <h4 className="col-lg-12">Results</h4>
                 {content}
             </div>
         );
@@ -62,7 +84,7 @@ var ListContainer = React.createClass({
     getInitialState: function() {
         return {
             data: [],
-            nameFilter: ''
+            filterOptions: {}
         };            
     }, 
 
@@ -71,17 +93,18 @@ var ListContainer = React.createClass({
         this.interval = setInterval(this.loadNotificationsFromServer, this.props.pollInterval);
     }, 
 
-    _handleFilterUpdate: function(filterValue) {
+    _handleFilterUpdate: function(filterOptions) {
         this.setState({
-            nameFilter: filterValue
+            filterOptions: filterOptions
         });
     },     
 
-    _hasData: function() {
+        _hasData: function() {
 
         var data = this.state.data.map(function(item) {
             return item.works.work; 
         });
+        var makes = [];
 
         if (data.length > 0) {                
             var imageDetails = _.map(data[0], function(result, n, key){
@@ -92,35 +115,47 @@ var ListContainer = React.createClass({
                     filename: result.filename,
                     imageType: image ? image._type : null,
                     photoLink: image ? image.__text : null,
-                    model: result.exif.model,
-                    make: result.exif.make
+                    model: result.exif.model || '',
+                    make: result.exif.make || ''
                 };
 
-                console.log(result);
+            }, []);   
 
-            }, []);  
-            return imageDetails
+            var makes = imageDetails.map(function(item) { return item.make; });
 
-            // }, []);   
-console.log(imageDetails);
-            // var displayedItems = imageDetails.filter(function(item) {
-            //     console.log(item.model);
-            //     var match = item.model.toLowerCase().indexOf(this.state.nameFilter.toLowerCase());
-            //     return (match !== -1);
-            // }.bind(this));
+            var displayedItems = imageDetails.filter(function(item) {
+                var filterOptions = this.state.filterOptions;
+                var match;
+                if (filterOptions.model) {
+                    match = item.model.toLowerCase().indexOf(filterOptions.model.toLowerCase());
+                    if (match === -1 ) {
+                        return false;
+                    }
+                }
+                if(filterOptions.make) {
+                    match = item.make.toLowerCase().indexOf(filterOptions.make.toLowerCase());
+                    if (match === -1 ) {
+                        return false;
+                    }
+                }
+                return true;
+            }.bind(this));
 
-            // return displayedItems
+            return [displayedItems, makes];
 
         } else {
-            return false
+            return [[], makes]
         }
     }, 
 
+
     render: function() {
+        var result = this._hasData();
+
         return (
           <div>
-            <Filters updateFilter={this._handleFilterUpdate} />
-            <List items={this._hasData()} />
+            <Filters makes={result[1]} updateFilter={this._handleFilterUpdate} />
+            <List items={result[0]} />
           </div>
         );        
     }
